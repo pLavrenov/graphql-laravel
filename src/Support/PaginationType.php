@@ -3,37 +3,22 @@
 declare(strict_types = 1);
 namespace Rebing\GraphQL\Support;
 
-use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type as GraphQLType;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
-use Rebing\GraphQL\Support\Facades\GraphQL;
 
-class PaginationType extends ObjectType
+class PaginationType extends AbstractPaginationType
 {
-    public function __construct(string $typeName, string $customName = null)
+    protected function paginationTypeName(string $typeName, string $customName = null): string
     {
-        $name = $customName ?: $typeName . 'Pagination';
-
-        $config = [
-            'name' => $name,
-            'fields' => $this->getPaginationFields($typeName),
-        ];
-
-        $underlyingType = GraphQL::type($typeName);
-
-        if (isset($underlyingType->config['model'])) {
-            $config['model'] = $underlyingType->config['model'];
-        }
-
-        parent::__construct($config);
+        return $customName ?: $typeName . 'Pagination';
     }
 
-    protected function getPaginationFields(string $typeName): array
+    public function getPaginationFields(): array
     {
         return [
             'data' => [
-                'type' => GraphQLType::listOf(GraphQL::type($typeName)),
+                'type' => GraphQLType::listOf($this->underlyingType()),
                 'description' => 'List of items on the current page',
                 'resolve' => function (LengthAwarePaginator $data): Collection {
                     return $data->getCollection();

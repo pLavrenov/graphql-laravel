@@ -216,11 +216,6 @@ parameters:
 			path: src/Support/PaginationType.php
 
 		-
-			message: "#^Method Rebing\\\\GraphQL\\\\Support\\\\PaginationType\\:\\:getPaginationFields\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Support/PaginationType.php
-
-		-
 			message: "#^Method Rebing\\\\GraphQL\\\\Support\\\\Privacy\\:\\:fire\\(\\) has parameter \\$args with no type specified\\.$#"
 			count: 1
 			path: src/Support/Privacy.php
